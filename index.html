@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Industry Giants</title>
 
 <style>
@@ -15,7 +15,7 @@ font-family:monospace;
 overflow:hidden;
 }
 
-/* scanlines */
+/* scanline effect */
 
 body::after{
 content:"";
@@ -26,8 +26,8 @@ width:100%;
 height:100%;
 background:repeating-linear-gradient(
 0deg,
-rgba(255,255,255,.03),
-rgba(255,255,255,.03) 1px,
+rgba(255,255,255,.04),
+rgba(255,255,255,.04) 1px,
 transparent 1px,
 transparent 3px
 );
@@ -90,20 +90,6 @@ animation:g2 1s infinite;
 100%{transform:translate(0,0)}
 }
 
-/* ripcord */
-
-#ripcord{
-position:absolute;
-top:-300px;
-left:50%;
-transform:translateX(-50%);
-transition:top 2s ease;
-}
-
-#ripcord.drop{
-top:0;
-}
-
 /* blinds */
 
 #blind{
@@ -149,53 +135,47 @@ cursor:pointer;
 <body>
 
 <div class="center" id="text">
-
 <div class="glitch" data-text="CLOSE YOUR EYES AND PULL THE RIPCORD">
 CLOSE YOUR EYES AND PULL THE RIPCORD
 </div>
-
 </div>
 
 <!-- RIPCORD -->
 
-<svg id="ripcord" width="140" height="500">
+<svg id="ripcord" width="220" height="600" style="position:absolute; left:50%; transform:translateX(-50%);">
 
-<defs>
-
-<linearGradient id="cordGrad" x1="0" y1="0" x2="0" y2="1">
-<stop offset="0%" stop-color="#ff4040"/>
-<stop offset="50%" stop-color="#990000"/>
-<stop offset="100%" stop-color="#ff4040"/>
-</linearGradient>
-
-<linearGradient id="handleGrad" x1="0" y1="0" x2="0" y2="1">
-<stop offset="0%" stop-color="#ff3030"/>
-<stop offset="100%" stop-color="#7a0000"/>
-</linearGradient>
-
-</defs>
-
-<!-- cord -->
+<!-- cable -->
 
 <line id="cord"
-x1="70"
+x1="110"
 y1="0"
-x2="70"
-y2="200"
-stroke="url(#cordGrad)"
-stroke-width="8"
+x2="110"
+y2="0"
+stroke="#888"
+stroke-width="3"
 stroke-linecap="round"/>
 
-<!-- connector -->
+<!-- inverted parachute handle -->
 
-<circle cx="70" cy="200" r="6" fill="#660000"/>
+<g id="handle" transform="translate(110,0)" style="cursor:grab">
 
-<!-- handle -->
-
-<g id="handle" transform="translate(70,200)" style="cursor:grab">
-
-<rect x="-45" y="-10" width="90" height="20" rx="8" fill="url(#handleGrad)"/>
-<rect x="-14" y="-10" width="28" height="40" rx="8" fill="url(#handleGrad)"/>
+<path d="
+M -80 -25
+Q -95 -25 -95 0
+Q -95 25 -80 25
+L -25 25
+L -25 70
+Q -25 90 0 90
+Q 25 90 25 70
+L 25 25
+L 80 25
+Q 95 25 95 0
+Q 95 -25 80 -25
+Z
+"
+fill="#c40000"
+stroke="#6b0000"
+stroke-width="4"/>
 
 </g>
 
@@ -206,7 +186,6 @@ stroke-linecap="round"/>
 <div id="signup">
 
 <h2>INDUSTRY GIANTS</h2>
-
 <p>Enter your email</p>
 
 <form action="https://formspree.io/f/YOURID" method="POST">
@@ -218,33 +197,63 @@ stroke-linecap="round"/>
 
 <script>
 
-const ripcord=document.getElementById("ripcord")
-const text=document.getElementById("text")
-const handle=document.getElementById("handle")
 const cord=document.getElementById("cord")
+const handle=document.getElementById("handle")
+const text=document.getElementById("text")
 const blind=document.getElementById("blind")
 const signup=document.getElementById("signup")
 
-let startY
-let pulling=false
-let base=200
-let maxPull=180
+let drop=0
+let maxDrop=260
 
-/* intro sequence */
+/* descend from ceiling with extending cable */
 
-setTimeout(()=>{
-ripcord.classList.add("drop")
-},500)
+function lowerRipcord(){
+
+drop+=2
+
+cord.setAttribute("y2",drop)
+handle.setAttribute("transform","translate(110,"+drop+")")
+
+if(drop<maxDrop){
+requestAnimationFrame(lowerRipcord)
+}else{
 
 setTimeout(()=>{
 text.classList.add("show")
-},2300)
+enableInteraction()
+},500)
+
+}
+
+}
+
+setTimeout(lowerRipcord,800)
 
 /* interaction */
 
+let pulling=false
+let startY
+let base=maxDrop
+let maxPull=200
+
+function enableInteraction(){
+
+handle.addEventListener("mousedown",start)
+document.addEventListener("mousemove",move)
+document.addEventListener("mouseup",end)
+
+handle.addEventListener("touchstart",start)
+document.addEventListener("touchmove",move)
+document.addEventListener("touchend",end)
+
+}
+
 function start(e){
+
 pulling=true
 startY=(e.touches?e.touches[0].clientY:e.clientY)
+
 }
 
 function move(e){
@@ -259,7 +268,7 @@ if(diff>maxPull) diff=maxPull
 
 let newY=base+diff
 
-handle.setAttribute("transform","translate(70,"+newY+")")
+handle.setAttribute("transform","translate(110,"+newY+")")
 cord.setAttribute("y2",newY)
 
 }
@@ -281,20 +290,12 @@ signup.style.display="block"
 
 }else{
 
-handle.setAttribute("transform","translate(70,"+base+")")
+handle.setAttribute("transform","translate(110,"+base+")")
 cord.setAttribute("y2",base)
 
 }
 
 }
-
-handle.addEventListener("mousedown",start)
-document.addEventListener("mousemove",move)
-document.addEventListener("mouseup",end)
-
-handle.addEventListener("touchstart",start)
-document.addEventListener("touchmove",move)
-document.addEventListener("touchend",end)
 
 </script>
 
