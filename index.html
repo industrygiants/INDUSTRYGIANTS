@@ -9,7 +9,7 @@
 
 body{
 margin:0;
-background:#000;
+background:black;
 color:white;
 font-family:monospace;
 overflow:hidden;
@@ -34,17 +34,23 @@ transparent 3px
 pointer-events:none;
 }
 
-/* center message */
+/* center text */
 
 .center{
 position:absolute;
-top:40%;
+top:45%;
 left:50%;
 transform:translate(-50%,-50%);
 text-align:center;
+opacity:0;
+transition:opacity 1.5s;
 }
 
-/* glitch */
+.center.show{
+opacity:1;
+}
+
+/* glitch text */
 
 .glitch{
 font-size:2rem;
@@ -84,13 +90,18 @@ animation:g2 1s infinite;
 100%{transform:translate(0,0)}
 }
 
-/* ripcord container */
+/* ripcord */
 
 #ripcord{
 position:absolute;
-top:0;
+top:-300px;
 left:50%;
 transform:translateX(-50%);
+transition:top 2s ease;
+}
+
+#ripcord.drop{
+top:0;
 }
 
 /* blinds */
@@ -137,49 +148,56 @@ cursor:pointer;
 </head>
 <body>
 
-<div class="center">
+<div class="center" id="text">
+
 <div class="glitch" data-text="CLOSE YOUR EYES AND PULL THE RIPCORD">
 CLOSE YOUR EYES AND PULL THE RIPCORD
 </div>
+
 </div>
 
 <!-- RIPCORD -->
 
-<svg id="ripcord" width="120" height="500">
-
-<!-- cord -->
-
-<line
-id="cord"
-x1="60"
-y1="0"
-x2="60"
-y2="200"
-stroke="url(#cordPattern)"
-stroke-width="6"
-/>
-
-<!-- T HANDLE -->
-
-<g id="handle" transform="translate(60,200)" style="cursor:grab">
-
-<rect x="-35" y="-6" width="70" height="12" rx="4" fill="#d40000"/>
-
-<rect x="-10" y="-6" width="20" height="35" rx="4" fill="#b00000"/>
-
-</g>
-
-<!-- braided cord pattern -->
+<svg id="ripcord" width="140" height="500">
 
 <defs>
 
-<linearGradient id="cordPattern" x1="0" x2="0" y1="0" y2="1">
+<linearGradient id="cordGrad" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#ff4040"/>
+<stop offset="50%" stop-color="#990000"/>
+<stop offset="100%" stop-color="#ff4040"/>
+</linearGradient>
+
+<linearGradient id="handleGrad" x1="0" y1="0" x2="0" y2="1">
 <stop offset="0%" stop-color="#ff3030"/>
-<stop offset="50%" stop-color="#aa0000"/>
-<stop offset="100%" stop-color="#ff3030"/>
+<stop offset="100%" stop-color="#7a0000"/>
 </linearGradient>
 
 </defs>
+
+<!-- cord -->
+
+<line id="cord"
+x1="70"
+y1="0"
+x2="70"
+y2="200"
+stroke="url(#cordGrad)"
+stroke-width="8"
+stroke-linecap="round"/>
+
+<!-- connector -->
+
+<circle cx="70" cy="200" r="6" fill="#660000"/>
+
+<!-- handle -->
+
+<g id="handle" transform="translate(70,200)" style="cursor:grab">
+
+<rect x="-45" y="-10" width="90" height="20" rx="8" fill="url(#handleGrad)"/>
+<rect x="-14" y="-10" width="28" height="40" rx="8" fill="url(#handleGrad)"/>
+
+</g>
 
 </svg>
 
@@ -200,6 +218,8 @@ stroke-width="6"
 
 <script>
 
+const ripcord=document.getElementById("ripcord")
+const text=document.getElementById("text")
 const handle=document.getElementById("handle")
 const cord=document.getElementById("cord")
 const blind=document.getElementById("blind")
@@ -209,6 +229,18 @@ let startY
 let pulling=false
 let base=200
 let maxPull=180
+
+/* intro sequence */
+
+setTimeout(()=>{
+ripcord.classList.add("drop")
+},500)
+
+setTimeout(()=>{
+text.classList.add("show")
+},2300)
+
+/* interaction */
 
 function start(e){
 pulling=true
@@ -227,16 +259,14 @@ if(diff>maxPull) diff=maxPull
 
 let newY=base+diff
 
-handle.setAttribute("transform","translate(60,"+newY+")")
-
+handle.setAttribute("transform","translate(70,"+newY+")")
 cord.setAttribute("y2",newY)
 
 }
 
 function end(){
 
-if(!pulling) return
-
+if(!pulling)return
 pulling=false
 
 let y=handle.transform.baseVal.getItem(0).matrix.f
@@ -251,7 +281,7 @@ signup.style.display="block"
 
 }else{
 
-handle.setAttribute("transform","translate(60,"+base+")")
+handle.setAttribute("transform","translate(70,"+base+")")
 cord.setAttribute("y2",base)
 
 }
