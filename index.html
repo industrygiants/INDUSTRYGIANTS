@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pull The Ripcord</title>
+
+<title>Industry Giants</title>
 
 <style>
 
@@ -12,32 +13,32 @@ margin:0;
 background:black;
 color:white;
 font-family:Arial,Helvetica,sans-serif;
-height:100vh;
 overflow:hidden;
 display:flex;
 justify-content:center;
 align-items:center;
+height:100vh;
+text-align:center;
 }
 
-/* scanline effect */
-
-body::after{
+.scanlines::before{
 content:"";
-position:absolute;
-inset:0;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
 background:repeating-linear-gradient(
-0deg,
-rgba(255,255,255,0.04) 0px,
-rgba(255,255,255,0.04) 2px,
-transparent 2px,
+to bottom,
+rgba(255,255,255,0.04),
+rgba(255,255,255,0.04) 1px,
+transparent 1px,
 transparent 4px
 );
 pointer-events:none;
 }
 
-/* stage */
-
-.stage{
+#container{
 position:relative;
 width:100%;
 height:100%;
@@ -47,159 +48,123 @@ align-items:center;
 flex-direction:column;
 }
 
-/* cord */
-
-.cord{
-position:absolute;
-top:-200px;
-width:3px;
-height:200px;
-background:#ddd;
-transition:top 1.2s ease;
+#text{
+font-size:clamp(24px,4vw,48px);
+letter-spacing:4px;
+opacity:0;
+transition:opacity 1s;
+text-shadow:
+2px 0 red,
+-2px 0 cyan;
 }
 
-/* handle */
-
-.handle{
+#cord{
 position:absolute;
-top:-20px;
-width:min(220px,40vw);
+top:-300px;
+display:flex;
+flex-direction:column;
+align-items:center;
+transition:top 2s ease;
+}
+
+#wire{
+width:4px;
+height:220px;
+background:linear-gradient(#ddd,#aaa);
+}
+
+#handle{
+width:150px;
+height:90px;
+border-radius:50px;
+border:14px solid #b30000;
+border-bottom:40px solid #b30000;
+background:linear-gradient(#ff3a3a,#b30000);
 cursor:pointer;
-transition:transform .2s;
-}
-
-.handle svg{
-width:100%;
-filter:drop-shadow(0 6px 10px rgba(0,0,0,.6));
-}
-
-/* jiggle */
-
-@keyframes jiggle{
-0%{transform:rotate(0)}
-25%{transform:rotate(2deg)}
-50%{transform:rotate(-2deg)}
-75%{transform:rotate(2deg)}
-100%{transform:rotate(0)}
+box-shadow:
+inset 0 0 10px rgba(0,0,0,0.7),
+0 0 10px rgba(255,0,0,0.6);
 }
 
 .jiggle{
-animation:jiggle .4s infinite;
+animation:jiggle 1.2s infinite;
 }
 
-/* text */
-
-.text{
-opacity:0;
-margin-top:200px;
-font-size:min(56px,8vw);
-letter-spacing:.15em;
-text-align:center;
-text-transform:uppercase;
-transition:opacity 1s;
+@keyframes jiggle{
+0%{transform:translateY(0)}
+50%{transform:translateY(10px)}
+100%{transform:translateY(0)}
 }
 
-.glitch{
-text-shadow:
--2px 0 red,
-2px 0 cyan;
-}
-
-/* signup */
-
-.signup{
+#signup{
 position:absolute;
 opacity:0;
-transition:opacity 1s;
-text-align:center;
-}
-
-.signup h2{
-font-weight:normal;
-margin-bottom:20px;
+transition:opacity 1.5s;
 }
 
 input{
-padding:14px;
+padding:12px;
 font-size:16px;
 border:none;
-border-radius:4px;
-width:220px;
+border-radius:6px;
+margin-right:6px;
 }
 
 button{
-padding:14px 20px;
-background:red;
-color:white;
-border:none;
-border-radius:4px;
+padding:12px 18px;
 font-size:16px;
+background:red;
+border:none;
+border-radius:6px;
+color:white;
 cursor:pointer;
+}
+
+#message{
+font-size:22px;
+margin-bottom:15px;
 }
 
 </style>
 </head>
 
-<body>
+<body class="scanlines">
 
-<div class="stage">
+<div id="container">
 
-<div class="cord" id="cord"></div>
-
-<div class="handle" id="handle">
-<svg viewBox="0 0 300 160">
-<defs>
-<linearGradient id="redtube" x1="0" x2="1">
-<stop offset="0%" stop-color="#ff4444"/>
-<stop offset="50%" stop-color="#cc0000"/>
-<stop offset="100%" stop-color="#ff4444"/>
-</linearGradient>
-</defs>
-
-<path d="
-M30 40
-Q30 10 60 10
-H240
-Q270 10 270 40
-Q270 70 240 70
-H180
-V120
-Q180 150 150 150
-Q120 150 120 120
-V70
-H60
-Q30 70 30 40
-Z"
-fill="url(#redtube)"
-stroke="#880000"
-stroke-width="6"/>
-</svg>
+<div id="cord">
+<div id="wire"></div>
+<div id="handle"></div>
 </div>
 
-<div class="text glitch" id="text">
-CLOSE YOUR EYES AND PULL<br>
-THE RIPCORD
+<div id="text">
+CLOSE YOUR EYES AND PULL THE RIPCORD
 </div>
 
-<div class="signup" id="signup">
+<div id="signup">
 
-<h2>
+<div id="message">
 You pulled the ripcord.<br>
 Enter your email for your unique ID.
-</h2>
+</div>
 
-<form action="https://formspree.io/f/xzdjpndk" method="POST">
+<form id="fanForm" action="https://formspree.io/f/xzdjpndk" method="POST">
+
+<input type="hidden" name="fan_id" id="fanID">
+
 <input type="email" name="email" placeholder="email address" required>
-<button>JOIN</button>
+
+<button type="submit">JOIN</button>
+
 </form>
 
 </div>
 
-<audio id="song" loop>
+</div>
+
+<audio id="track" loop>
 <source src="sample.mp3" type="audio/mpeg">
 </audio>
-
-</div>
 
 <script>
 
@@ -207,64 +172,85 @@ const cord=document.getElementById("cord")
 const handle=document.getElementById("handle")
 const text=document.getElementById("text")
 const signup=document.getElementById("signup")
-const song=document.getElementById("song")
+const audio=document.getElementById("track")
 
 let pulled=false
 
-/* descend animation */
+function descend(){
 
-setTimeout(()=>{
-cord.style.top="0"
-handle.style.top="180px"
-},200)
-
-/* show text */
+cord.style.top="120px"
 
 setTimeout(()=>{
 text.style.opacity=1
-},1400)
-
-/* idle jiggle */
+},2000)
 
 setTimeout(()=>{
 handle.classList.add("jiggle")
-},3500)
+},4500)
 
-/* pull action */
+}
 
-handle.addEventListener("click",()=>{
+window.onload=descend
 
-if(pulled) return
+handle.addEventListener("click",pull)
+
+function pull(){
+
+if(pulled)return
 pulled=true
 
 handle.classList.remove("jiggle")
 
-/* cord snap upward */
+cord.style.top="-300px"
 
-cord.style.top="-200px"
-handle.style.top="-60px"
-
-/* fade music to 50% */
-
-song.volume=0
-song.play()
-
-let fade=setInterval(()=>{
-if(song.volume<0.5){
-song.volume+=0.02
-}else{
-clearInterval(fade)
-}
-},120)
-
-/* transition to signup */
+fadeAudio()
 
 setTimeout(()=>{
-text.style.opacity=0
-signup.style.opacity=1
-},1000)
 
-})
+text.style.opacity=0
+
+signup.style.opacity=1
+
+generateID()
+
+},1500)
+
+}
+
+function fadeAudio(){
+
+audio.volume=0
+audio.play()
+
+let v=0
+
+let fade=setInterval(()=>{
+
+v+=0.02
+audio.volume=v
+
+if(v>=0.5){
+audio.volume=0.5
+clearInterval(fade)
+}
+
+},120)
+
+}
+
+async function generateID(){
+
+const res=await fetch("https://api.countapi.xyz/hit/industry-giants/ripcord")
+
+const data=await res.json()
+
+const id="IG-"+String(data.value).padStart(3,"0")
+
+document.getElementById("fanID").value=id
+
+window.generatedID=id
+
+}
 
 </script>
 
