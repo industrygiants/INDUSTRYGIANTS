@@ -106,19 +106,137 @@ body:before{
 #c1{top:12%;left:6%}
 #c2{top:78%;left:12%}
 #c3{top:32%;right:8%}
-@@ -234,100 +236,107 @@
+#c4{bottom:8%;right:12%}
+#c5{bottom:40%;left:3%}
+
+/* ripcord container */
+#cord{
+  position:absolute;
+  top:0;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:20;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+/* wire */
+#wire{
+  width:3px;
+  background:repeating-linear-gradient(
+    45deg,
+    #dcdcdc,
+    #dcdcdc 2px,
+    #888 2px,
+    #888 4px
+  );
+}
+
+/* handle wrapper */
+#handle-wrapper{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  position:absolute;
+  top:-100px; /* start off screen */
+  transition:top 1.4s cubic-bezier(.22,.61,.36,1);
+}
+
+/* simple pulley handle */
+#handle{
+  width:40px;
+  height:20px;
+  border:5px solid #ff2b2b;
+  border-radius:6px;
+  background:transparent;
+  box-shadow: inset 0 0 5px rgba(255,0,0,.4),0 0 6px rgba(255,0,0,.6);
+}
+
+/* email capture */
+#signup{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  display:none;
+  text-align:center;
+}
+input{
+  background:#000;
+  border:1px solid #444;
+  color:#fff;
+  padding:10px;
+  font-family:inherit;
+  width:260px;
+}
+button{
+  background:#111;
+  border:1px solid #555;
+  color:#fff;
+  padding:10px 20px;
+  margin-left:6px;
+  cursor:pointer;
+}
+
+/* footer */
+#footer{
+  position:absolute;
+  bottom:12px;
+  font-size:10px;
+  opacity:.25;
+  letter-spacing:3px;
+}
+</style>
+</head>
+<body>
+
+<div class="glitch" data-text="CLOSE YOUR EYES AND PULL THE RIPCORD">
+CLOSE YOUR EYES AND PULL THE RIPCORD
+</div>
+
+<div class="clue" id="c1">working so late on the corporate shift</div>
+<div class="clue" id="c2">she cried all night</div>
+<div class="clue" id="c3">it’s a necessary torture</div>
+<div class="clue" id="c4">no one coming to save you</div>
+<div class="clue" id="c5">registry office</div>
+
+<div id="cord">
+  <div id="wire"></div>
+  <div id="handle-wrapper">
+    <div id="handle"></div>
+  </div>
+</div>
+
+<div id="signup">
+<form action="https://formspree.io/f/xzdjpndk" method="POST">
+<input type="email" name="email" placeholder="enter email" required>
+<button>JOIN</button>
+</form>
+</div>
+
+<div id="footer">
+INDUSTRY GIANTS // IG-001
+</div>
+
+<audio id="track" loop>
+<source src="ripcord_loop.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const handleWrapper = document.getElementById("handle-wrapper");
+const cord = document.getElementById("cord");
+const audio = document.getElementById("track");
+const wire = document.getElementById("wire");
+const clues = document.querySelectorAll(".clue");
+const signup = document.getElementById("signup");
+const glitch = document.querySelector(".glitch");
+
 // detect mobile
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-// MOBILE OPTIMIZATION
 if(isMobile){
-  glitch.style.fontSize = "24px";
-  glitch.style.letterSpacing = "2px";
-  glitch.style.top = "45%";
-  clues.forEach(c=>{
-    c.style.fontSize="10px";
-    c.style.left="5%";
-    c.style.right="5%";
   // BIG readable glitch text
   glitch.style.fontSize = "32px";
   glitch.style.letterSpacing = "3px";
@@ -140,11 +258,6 @@ if(isMobile){
     if(positions[i].left) c.style.left=positions[i].left;
     if(positions[i].right) c.style.right=positions[i].right;
   });
-  document.getElementById("c1").style.top="5%";
-  document.getElementById("c2").style.top="65%";
-  document.getElementById("c3").style.top="25%";
-  document.getElementById("c4").style.top="50%";
-  document.getElementById("c5").style.top="40%";
 }
 
 // initial drop
