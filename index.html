@@ -258,16 +258,17 @@ CLOSE YOUR EYES AND PULL THE RIPCORD
 <div id="footer">
 INDUSTRY GIANTS // IG-001
 </div>
-  <audio id="track" loop>
+
+<audio id="track" loop>
 <source src="ripcord_loop.mp3" type="audio/mpeg">
 </audio>
-
 
 <script>
 
 const handle = document.getElementById("handle")
 const wire = document.getElementById("wire")
 const signup = document.getElementById("signup")
+const audio = document.getElementById("track")
 
 const DROP = 260
 
@@ -295,6 +296,31 @@ document.querySelector(".glitch").style.display="none"
 setTimeout(()=>{
 signup.style.display="block"
 },500)
+
+/* AUDIO FADE-IN */
+
+if (!audio.playing) {
+    audio.volume = 0;
+    audio.play().catch(e => console.log("Autoplay blocked:", e));
+
+    const targetVolume = 0.5
+    const fadeDuration = 3000
+    let startTime = null
+
+    function fadeIn(timestamp){
+        if (!startTime) startTime = timestamp
+        const progress = timestamp - startTime
+        const newVolume = Math.min(progress / fadeDuration * targetVolume, targetVolume)
+        audio.volume = newVolume
+        if (progress < fadeDuration){
+            requestAnimationFrame(fadeIn)
+        } else {
+            audio.volume = targetVolume
+        }
+    }
+
+    requestAnimationFrame(fadeIn)
+}
 
 }
 
