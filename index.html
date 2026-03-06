@@ -118,16 +118,12 @@ body:before{
   display:flex;
   flex-direction:column;
   align-items:center;
+  height:100vh; /* container spans full viewport */
 }
 
-/* wire: always from top to handle */
+/* wire: stretches from top to handle */
 #wire{
-  position:absolute;
-  top:0;
-  left:50%;
-  transform:translateX(-50%);
   width:3px;
-  height:100vh; /* full viewport */
   background:repeating-linear-gradient(
     45deg,
     #dcdcdc,
@@ -135,7 +131,7 @@ body:before{
     #888 2px,
     #888 4px
   );
-  z-index:10;
+  flex-grow:1; /* fills space above handle */
 }
 
 /* handle wrapper: moves down */
@@ -143,10 +139,7 @@ body:before{
   display:flex;
   flex-direction:column;
   align-items:center;
-  position:absolute;
-  top:0;
   transition:transform 1.4s cubic-bezier(.22,.61,.36,1);
-  z-index:20;
 }
 
 /* simple pulley handle */
