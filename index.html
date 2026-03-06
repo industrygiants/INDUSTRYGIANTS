@@ -9,72 +9,70 @@
 <style>
 
 body{
-margin:0;
-background:#000;
-color:#fff;
-font-family:'Share Tech Mono',monospace;
-overflow:hidden;
-display:flex;
-align-items:center;
-justify-content:center;
-height:100vh;
-transition: background 1s linear;
+  margin:0;
+  background:#000;
+  color:#fff;
+  font-family:'Share Tech Mono',monospace;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:100vh;
+  transition: background 1s linear;
 }
 
 /* scanlines */
-
 body:before{
-content:"";
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:repeating-linear-gradient(
-0deg,
-rgba(255,255,255,.03),
-rgba(255,255,255,.03) 1px,
-transparent 1px,
-transparent 3px
-);
-pointer-events:none;
+  content:"";
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:repeating-linear-gradient(
+    0deg,
+    rgba(255,255,255,.03),
+    rgba(255,255,255,.03) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events:none;
 }
 
 /* glitch text */
-
 .glitch{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-font-size:48px;
-letter-spacing:8px;
-text-align:center;
-white-space:nowrap;
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-size:48px;
+  letter-spacing:8px;
+  text-align:center;
+  white-space:nowrap;
 }
 
 .glitch:before,
 .glitch:after{
-content:attr(data-text);
-position:absolute;
-left:0;
-top:0;
-width:100%;
-overflow:hidden;
+  content:attr(data-text);
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  overflow:hidden;
 }
 
 .glitch:before{
-left:2px;
-text-shadow:-2px 0 red;
-clip-path:polygon(0 0,100% 0,100% 45%,0 45%);
-animation:glitch1 2s infinite linear alternate-reverse;
+  left:2px;
+  text-shadow:-2px 0 red;
+  clip-path:polygon(0 0,100% 0,100% 45%,0 45%);
+  animation:glitch1 2s infinite linear alternate-reverse;
 }
 
 .glitch:after{
-left:-2px;
-text-shadow:-2px 0 cyan;
-clip-path:polygon(0 60%,100% 60%,100% 100%,0 100%);
-animation:glitch2 2s infinite linear alternate-reverse;
+  left:-2px;
+  text-shadow:-2px 0 cyan;
+  clip-path:polygon(0 60%,100% 60%,100% 100%,0 100%);
+  animation:glitch2 2s infinite linear alternate-reverse;
 }
 
 @keyframes glitch1{
@@ -96,13 +94,12 @@ animation:glitch2 2s infinite linear alternate-reverse;
 }
 
 /* hidden lyric fragments */
-
 .clue{
-position:absolute;
-font-size:11px;
-opacity:.18;
-color:#aaa;
-transition: text-shadow 0.3s ease-in-out;
+  position:absolute;
+  font-size:11px;
+  opacity:.18;
+  color:#aaa;
+  transition: text-shadow 0.3s ease-in-out;
 }
 
 #c1{top:12%;left:6%}
@@ -112,111 +109,108 @@ transition: text-shadow 0.3s ease-in-out;
 #c5{bottom:40%;left:3%}
 
 /* ripcord */
-
 #cord{
-position:absolute;
-top:0;
-left:50%;
-transform:translateX(-50%);
-z-index:20;
-pointer-events:none;
+  position:absolute;
+  top:0;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:20;
+  pointer-events:none;
 }
 
 #wire{
-position:absolute;
-top:0;
-left:50%;
-transform:translateX(-50%);
-width:3px;
-height:0;
-background:repeating-linear-gradient(
-45deg,
-#dcdcdc,
-#dcdcdc 2px,
-#888 2px,
-#888 4px
-);
-transition:height 1.4s cubic-bezier(.22,.61,.36,1);
+  position:absolute;
+  top:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:3px;
+  height:0;
+  background:repeating-linear-gradient(
+    45deg,
+    #dcdcdc,
+    #dcdcdc 2px,
+    #888 2px,
+    #888 4px
+  );
+  transition:height 1.4s cubic-bezier(.22,.61,.36,1);
 }
 
+/* Connected hollow T handle */
 #handle{
-position:absolute;
-top:0;
-left:50%;
-transform:translateX(-50%);
-width:140px;
-height:110px;
-cursor:pointer;
-pointer-events:auto;
-transition:top 1.4s cubic-bezier(.22,.61,.36,1);
+  position:absolute;
+  top:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:140px;
+  height:110px;
+  cursor:pointer;
+  pointer-events:auto;
 }
 
-.bar{
-position:absolute;
-top:0;
-width:140px;
-height:45px;
-border-radius:30px;
-/* hollow red plastic look */
-background:transparent;
-border: 6px solid #ff2b2b;
-box-shadow:
-inset 0 0 6px rgba(255,0,0,.4),
-0 0 8px rgba(255,0,0,.6);
+/* horizontal bar */
+#handle::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:140px;
+  height:45px;
+  border:6px solid #ff2b2b;
+  border-radius:15px;
+  background:transparent;
+  box-shadow: inset 0 0 6px rgba(255,0,0,.4),0 0 8px rgba(255,0,0,.6);
 }
 
-.stem{
-position:absolute;
-top:40px;
-left:50%;
-transform:translateX(-50%);
-width:46px;
-height:70px;
-border-radius:25px;
-background:transparent;
-border: 6px solid #ff2b2b;
-box-shadow:
-inset 0 0 5px rgba(255,0,0,.4),
-0 0 6px rgba(255,0,0,.6);
+/* vertical stem */
+#handle::after{
+  content:"";
+  position:absolute;
+  top:40px;
+  left:50%;
+  transform:translateX(-50%);
+  width:46px;
+  height:70px;
+  border:6px solid #ff2b2b;
+  border-radius:15px;
+  background:transparent;
+  box-shadow: inset 0 0 5px rgba(255,0,0,.4),0 0 6px rgba(255,0,0,.6);
 }
 
 /* email capture */
-
 #signup{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-display:none;
-text-align:center;
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  display:none;
+  text-align:center;
 }
 
 input{
-background:#000;
-border:1px solid #444;
-color:#fff;
-padding:10px;
-font-family:inherit;
-width:260px;
+  background:#000;
+  border:1px solid #444;
+  color:#fff;
+  padding:10px;
+  font-family:inherit;
+  width:260px;
 }
 
 button{
-background:#111;
-border:1px solid #555;
-color:#fff;
-padding:10px 20px;
-margin-left:6px;
-cursor:pointer;
+  background:#111;
+  border:1px solid #555;
+  color:#fff;
+  padding:10px 20px;
+  margin-left:6px;
+  cursor:pointer;
 }
 
 /* cryptic footer */
-
 #footer{
-position:absolute;
-bottom:12px;
-font-size:10px;
-opacity:.25;
-letter-spacing:3px;
+  position:absolute;
+  bottom:12px;
+  font-size:10px;
+  opacity:.25;
+  letter-spacing:3px;
 }
 
 </style>
@@ -229,7 +223,6 @@ CLOSE YOUR EYES AND PULL THE RIPCORD
 </div>
 
 <!-- cryptic fragments -->
-
 <div class="clue" id="c1">working so late on the corporate shift</div>
 <div class="clue" id="c2">she cried all night</div>
 <div class="clue" id="c3">it’s a necessary torture</div>
@@ -237,27 +230,17 @@ CLOSE YOUR EYES AND PULL THE RIPCORD
 <div class="clue" id="c5">registry office</div>
 
 <!-- ripcord -->
-
 <div id="cord">
 <div id="wire"></div>
-
-<div id="handle">
-<div class="bar"></div>
-<div class="stem"></div>
-</div>
+<div id="handle"></div>
 </div>
 
 <!-- signup -->
-
 <div id="signup">
-
 <form action="https://formspree.io/f/xzdjpndk" method="POST">
-
 <input type="email" name="email" placeholder="enter email" required>
 <button>JOIN</button>
-
 </form>
-
 </div>
 
 <div id="footer">
@@ -279,34 +262,29 @@ const clues = document.querySelectorAll(".clue")
 const DROP = 260
 
 /* cord descends */
-
 setTimeout(()=>{
-
-wire.style.height = DROP + "px"
-handle.style.top = DROP + "px"
-
+  wire.style.height = DROP + "px"
+  handle.style.top = DROP + "px"
 },1200)
 
 /* pull */
-
 handle.onclick = ()=>{
 
-wire.style.transition="height .6s ease-in"
-handle.style.transition="top .6s ease-in"
+  wire.style.transition="height .6s ease-in"
+  handle.style.transition="top .6s ease-in"
 
-wire.style.height="0px"
-handle.style.top="-140px"
+  wire.style.height="0px"
+  handle.style.top="-140px"
 
-document.querySelector(".glitch").style.display="none"
+  document.querySelector(".glitch").style.display="none"
 
-setTimeout(()=>{
-signup.style.display="block"
-},500)
+  setTimeout(()=>{
+    signup.style.display="block"
+  },500)
 
-/* AUDIO FADE-IN */
-
-let audioStarted = false
-if(!audioStarted){
+  /* AUDIO FADE-IN */
+  let audioStarted = false
+  if(!audioStarted){
     audioStarted = true
     audio.volume = 0;
     audio.play().catch(e => console.log("Autoplay blocked:", e));
@@ -328,31 +306,28 @@ if(!audioStarted){
     }
 
     requestAnimationFrame(fadeIn)
-}
+  }
 
-/* CRYPTIC MESSAGES GLOW LOOP */
+  /* CRYPTIC MESSAGES GLOW LOOP */
+  let clueIndex = 0;
+  function glowClues() {
+      clues.forEach((c,i)=> c.style.textShadow=""); // reset all
+      clues[clueIndex].style.textShadow="0 0 8px red,0 0 14px red";
+      clueIndex = (clueIndex+1) % clues.length;
+  }
+  const clueInterval = setInterval(glowClues, 1200);
 
-let clueIndex = 0;
-
-function glowClues() {
-    clues.forEach((c,i)=> c.style.textShadow=""); // reset all
-    clues[clueIndex].style.textShadow="0 0 8px red,0 0 14px red";
-    clueIndex = (clueIndex+1) % clues.length;
-}
-
-const clueInterval = setInterval(glowClues, 1200);
-
-/* BACKGROUND WAVE GLOW */
-
-let bgStart = null;
-function animateBackground(timestamp){
-    if(!bgStart) bgStart = timestamp;
-    const progress = (timestamp - bgStart)/1000; // seconds
-    const intensity = 0.05 + 0.1*Math.sin(progress*1.2); // slow pulsation
-    document.body.style.backgroundColor = `rgba(0,0,32,${intensity})`;
-    requestAnimationFrame(animateBackground);
-}
-requestAnimationFrame(animateBackground);
+  /* BACKGROUND WAVE GLOW */
+  let bgStart = null;
+  function animateBackground(timestamp){
+      if(!bgStart) bgStart = timestamp;
+      const t = (timestamp - bgStart)/1000; // seconds
+      const sine = Math.sin(t*0.3); // very slow pulsation
+      const b = 32 + 32*((sine+1)/2); // dark marine blue oscillation
+      document.body.style.backgroundColor = `rgb(0,0,${b})`;
+      requestAnimationFrame(animateBackground);
+  }
+  requestAnimationFrame(animateBackground);
 
 }
 
