@@ -101,6 +101,8 @@ body:before{
   color:#aaa;
   transition:text-shadow 0.3s ease-in-out, color 0.3s ease-in-out;
 }
+
+/* default desktop positions */
 #c1{top:12%;left:6%}
 #c2{top:78%;left:12%}
 #c3{top:32%;right:8%}
@@ -234,21 +236,28 @@ const glitch = document.querySelector(".glitch");
 // detect mobile
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-// MOBILE OPTIMIZATION
 if(isMobile){
-  glitch.style.fontSize = "24px";
-  glitch.style.letterSpacing = "2px";
-  glitch.style.top = "45%";
-  clues.forEach(c=>{
-    c.style.fontSize="10px";
-    c.style.left="5%";
-    c.style.right="5%";
+  // BIG readable glitch text
+  glitch.style.fontSize = "32px";
+  glitch.style.letterSpacing = "3px";
+  glitch.style.top = "40%";
+
+  // SCATTER clues around screen for mobile
+  const positions = [
+    {top:"10%", left:"5%"},
+    {top:"25%", right:"5%"},
+    {top:"50%", left:"15%"},
+    {top:"65%", right:"10%"},
+    {top:"80%", left:"10%"}
+  ];
+  clues.forEach((c,i)=>{
+    c.style.fontSize="16px";
+    c.style.opacity=".18";
+    c.style.position="absolute";
+    if(positions[i].top) c.style.top=positions[i].top;
+    if(positions[i].left) c.style.left=positions[i].left;
+    if(positions[i].right) c.style.right=positions[i].right;
   });
-  document.getElementById("c1").style.top="5%";
-  document.getElementById("c2").style.top="65%";
-  document.getElementById("c3").style.top="25%";
-  document.getElementById("c4").style.top="50%";
-  document.getElementById("c5").style.top="40%";
 }
 
 // initial drop
