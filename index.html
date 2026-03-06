@@ -1,132 +1,108 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Industry Giants</title>
+<title>Ripcord</title>
 
 <style>
 
 body{
 margin:0;
-background:black;
-color:white;
-font-family:Arial,Helvetica,sans-serif;
+background:#000;
+color:#fff;
+font-family:Arial, Helvetica, sans-serif;
 overflow:hidden;
 display:flex;
-justify-content:center;
 align-items:center;
+justify-content:center;
 height:100vh;
-text-align:center;
-}
-
-/* CRT scanlines */
-
-body::before{
-content:"";
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:repeating-linear-gradient(
-to bottom,
-rgba(255,255,255,0.04),
-rgba(255,255,255,0.04) 1px,
-transparent 1px,
-transparent 4px
-);
-pointer-events:none;
-}
-
-#container{
-position:relative;
-width:100%;
-height:100%;
-display:flex;
-justify-content:center;
-align-items:center;
-flex-direction:column;
 }
 
 /* TEXT */
 
-#text{
-font-size:clamp(24px,4vw,48px);
-letter-spacing:4px;
-opacity:0;
-transition:opacity 1s;
-text-shadow:2px 0 red,-2px 0 cyan;
+#title{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:48px;
+letter-spacing:6px;
+text-align:center;
+white-space:nowrap;
 }
 
-/* RIPCORD */
+/* RIPCORD CONTAINER */
 
 #cord{
 position:absolute;
-top:-320px;
-display:flex;
-flex-direction:column;
-align-items:center;
+top:0;
+left:50%;
+transform:translateX(-50%);
+pointer-events:none;
+z-index:10;
 }
+
+/* WIRE */
 
 #wire{
-width:4px;
-height:220px;
-background:linear-gradient(#ddd,#999);
+position:absolute;
+top:0;
+left:50%;
+transform:translateX(-50%);
+width:3px;
+height:0;
+background:repeating-linear-gradient(
+45deg,
+#e0e0e0,
+#e0e0e0 2px,
+#9a9a9a 2px,
+#9a9a9a 4px
+);
+transition:height 1.4s cubic-bezier(.22,.61,.36,1);
 }
+
+/* HANDLE */
 
 #handle{
-width:150px;
-height:90px;
-border-radius:50px;
-border:14px solid #b30000;
-border-bottom:40px solid #b30000;
-background:linear-gradient(#ff3a3a,#b30000);
+position:absolute;
+top:0;
+left:50%;
+transform:translateX(-50%);
+width:140px;
+height:110px;
 cursor:pointer;
+pointer-events:auto;
+transition:top 1.4s cubic-bezier(.22,.61,.36,1);
+}
+
+/* T BAR */
+
+.bar{
+position:absolute;
+top:0;
+width:140px;
+height:45px;
+border-radius:30px;
+background:linear-gradient(#ff2b2b,#b30000);
 box-shadow:
 inset 0 0 10px rgba(0,0,0,.6),
-0 0 10px rgba(255,0,0,.7);
+0 0 10px rgba(255,0,0,.8);
 }
 
-.jiggle{
-animation:jiggle 1.2s infinite;
-}
+/* STEM */
 
-@keyframes jiggle{
-0%{transform:translateY(0)}
-50%{transform:translateY(10px)}
-100%{transform:translateY(0)}
-}
-
-/* SIGNUP */
-
-#signup{
+.stem{
 position:absolute;
-opacity:0;
-transition:opacity 1.4s;
-}
-
-input{
-padding:12px;
-font-size:16px;
-border:none;
-border-radius:6px;
-margin-right:6px;
-}
-
-button{
-padding:12px 18px;
-font-size:16px;
-background:red;
-border:none;
-border-radius:6px;
-color:white;
-cursor:pointer;
-}
-
-#message{
-font-size:22px;
-margin-bottom:15px;
+top:40px;
+left:50%;
+transform:translateX(-50%);
+width:46px;
+height:70px;
+border-radius:25px;
+background:linear-gradient(#ff2b2b,#b30000);
+box-shadow:
+inset 0 0 10px rgba(0,0,0,.6),
+0 0 10px rgba(255,0,0,.8);
 }
 
 </style>
@@ -134,175 +110,44 @@ margin-bottom:15px;
 
 <body>
 
-<div id="container">
-
-<div id="cord">
-<div id="wire"></div>
-<div id="handle"></div>
-</div>
-
-<div id="text">
+<div id="title">
 CLOSE YOUR EYES AND PULL THE RIPCORD
 </div>
 
-<div id="signup">
+<div id="cord">
+<div id="wire"></div>
 
-<div id="message">
-You pulled the ripcord.<br>
-Enter your email for your unique ID.
+<div id="handle">
+<div class="bar"></div>
+<div class="stem"></div>
 </div>
-
-<form id="fanForm" action="https://formspree.io/f/xzdjpndk" method="POST">
-
-<input type="hidden" name="fan_id" id="fanID">
-
-<input type="email" name="email" placeholder="email address" required>
-
-<button type="submit">JOIN</button>
-
-</form>
-
 </div>
-
-</div>
-
-<audio id="track" loop>
-<source src="sample.mp3" type="audio/mpeg">
-</audio>
 
 <script>
 
-const cord = document.getElementById("cord")
 const handle = document.getElementById("handle")
-const text = document.getElementById("text")
-const signup = document.getElementById("signup")
-const audio = document.getElementById("track")
+const wire = document.getElementById("wire")
 
-let pulled = false
-let startY = 0
-let currentPull = 0
+const DROP_DISTANCE = 260
 
-/* DESCEND FROM CEILING */
-
-function descend(){
-
-cord.style.transition = "top 2s ease"
-cord.style.top = "120px"
+/* initial drop */
 
 setTimeout(()=>{
-text.style.opacity = 1
-},2000)
 
-setTimeout(()=>{
-handle.classList.add("jiggle")
-},4500)
+wire.style.height = DROP_DISTANCE + "px"
+handle.style.top = DROP_DISTANCE + "px"
 
-}
+},1000)
 
-window.onload = descend
+/* pull action */
 
-/* DRAG INTERACTION */
+handle.onclick = ()=>{
 
-handle.addEventListener("mousedown",startPull)
-handle.addEventListener("touchstart",startPull)
+wire.style.transition="height .6s ease-in"
+handle.style.transition="top .6s ease-in"
 
-function startPull(e){
-
-if(pulled) return
-
-handle.classList.remove("jiggle")
-
-startY = e.touches ? e.touches[0].clientY : e.clientY
-
-document.addEventListener("mousemove",pullMove)
-document.addEventListener("touchmove",pullMove)
-
-document.addEventListener("mouseup",releasePull)
-document.addEventListener("touchend",releasePull)
-
-}
-
-function pullMove(e){
-
-let y = e.touches ? e.touches[0].clientY : e.clientY
-currentPull = y - startY
-
-if(currentPull < 0) currentPull = 0
-if(currentPull > 180) currentPull = 180
-
-cord.style.transform = `translateY(${currentPull}px)`
-
-}
-
-function releasePull(){
-
-document.removeEventListener("mousemove",pullMove)
-document.removeEventListener("touchmove",pullMove)
-
-document.removeEventListener("mouseup",releasePull)
-document.removeEventListener("touchend",releasePull)
-
-if(currentPull > 120){
-triggerRipcord()
-}else{
-cord.style.transform = "translateY(0)"
-}
-
-}
-
-/* SNAP UPWARD */
-
-function triggerRipcord(){
-
-pulled = true
-
-cord.style.transition = "transform .6s ease, top .8s ease"
-cord.style.transform = "translateY(-450px)"
-cord.style.top = "-450px"
-
-fadeAudio()
-
-setTimeout(()=>{
-text.style.opacity = 0
-signup.style.opacity = 1
-generateID()
-},1400)
-
-}
-
-/* AUDIO FADE */
-
-function fadeAudio(){
-
-audio.volume = 0
-audio.play()
-
-let v = 0
-
-let fade = setInterval(()=>{
-
-v += 0.02
-audio.volume = v
-
-if(v >= 0.5){
-audio.volume = 0.5
-clearInterval(fade)
-}
-
-},120)
-
-}
-
-/* ID SYSTEM */
-
-async function generateID(){
-
-const res = await fetch("https://api.countapi.xyz/hit/industry-giants/ripcord")
-const data = await res.json()
-
-const id = "IG-" + String(data.value).padStart(3,"0")
-
-document.getElementById("fanID").value = id
+wire.style.height="0px"
+handle.style.top="-140px"
 
 }
 
