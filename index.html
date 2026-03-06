@@ -1,1 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Industry Giants</title>
+
+<style>
+
+body{
+margin:0;
+background:black;
+color:white;
+font-family:monospace;
+overflow:hidden;
+}
+
+/* scanline effect */
+
+body::after{
+content:"";
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:repeating-linear-gradient(
+0deg,
+rgba(255,255,255,.03),
+rgba(255,255,255,.03) 1px,
+transparent 1px,
+transparent 3px
+);
+pointer-events:none;
+}
+
+/* center text */
+
+.center{
+position:absolute;
+top:40%;
+left:50%;
+transform:translate(-50%,-50%);
+text-align:center;
+width:90%;
+}
+
+/* glitch text */
+
+.glitch{
+font-size:2rem;
+letter-spacing:4px;
+position:relative;
+}
+
+.glitch:before,
+.glitch:after{
+content:attr(data-text);
+position:absolute;
+left:0;
+top:0;
+width:100%;
+opacity:.7;
+}
+
+.glitch:before{
+color:red;
+animation:glitch1 1s infinite;
+}
+
+.glitch:after{
+color:#00ffff;
+animation:glitch2 1s infinite;
+}
+
+@keyframes glitch1{
+0%{transform:translate(2px,0)}
+25%{transform:translate(-2px,1px)}
+50%{transform:translate(-1px,-2px)}
+75%{transform:translate(2px,2px)}
+100%{transform:translate(0,0)}
+}
+
+@keyframes glitch2{
+0%{transform:translate(-2px,0)}
+25%{transform:translate(2px,-1px)}
+50%{transform:translate(1px,2px)}
+75%{transform:translate(-2px,-2px)}
+100%{transform:translate(0,0)}
+}
+
+/* ripcord */
+
+.ripcord{
+position:absolute;
+top:0;
+left:50%;
+transform:translateX(-50%);
+display:flex;
+flex-direction:column;
+align-items:center;
+}
+
+.cord{
+width:3px;
+height:200px;
+background:red;
+}
+
+.handle{
+width:45px;
+height:45px;
+background:red;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:grab;
+font-weight:bold;
+}
+
+/* blinds animation */
+
+#blind{
+position:fixed;
+top:-100%;
+left:0;
+width:100%;
+height:100%;
+background:black;
+transition:top 1.2s ease;
+z-index:10;
+}
+
+/* signup */
+
+#signup{
+display:none;
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+text-align:center;
+z-index:11;
+}
+
+input{
+padding:12px;
+background:black;
+border:1px solid white;
+color:white;
+}
+
+button{
+padding:12px 20px;
+background:red;
+border:none;
+color:white;
+cursor:pointer;
+margin-left:6px;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="center">
+<div class="glitch" data-text="CLOSE YOUR EYES AND PULL THE RIPCORD">
+CLOSE YOUR EYES AND PULL THE RIPCORD
+</div>
+</div>
+
+<div class="ripcord">
+
+<div class="cord"></div>
+
+<div class="handle" id="handle">
+T
+</div>
+
+</div>
+
+<div id="blind"></div>
+
+<div id="signup">
+
+<h2>INDUSTRY GIANTS</h2>
+
+<p>Enter your email</p>
+
+<form action="https://formspree.io/f/YOURID" method="POST">
+<input type="email" name="email" placeholder="email address" required>
+<button>JOIN</button>
+</form>
+
+</div>
+
+<script>
+
+const handle=document.getElementById("handle")
+const blind=document.getElementById("blind")
+const signup=document.getElementById("signup")
+
+let startY=0
+let pulling=false
+
+handle.addEventListener("mousedown",e=>{
+pulling=true
+startY=e.clientY
+})
+
+document.addEventListener("mousemove",e=>{
+if(!pulling)return
+
+let diff=e.clientY-startY
+
+if(diff>0){
+handle.style.transform="translateY("+diff+"px)"
+}
+})
+
+document.addEventListener("mouseup",()=>{
+if(!pulling)return
+
+pulling=false
+
+handle.style.transform="translateY(0px)"
+
+blind.style.top="0"
+
+setTimeout(()=>{
+signup.style.display="block"
+},1000)
+
+})
+
+</script>
+
+</body>
+</html>
