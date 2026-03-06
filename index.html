@@ -118,6 +118,7 @@ body:before{
   display:flex;
   flex-direction:column;
   align-items:center;
+  transition:top 1.4s cubic-bezier(.22,.61,.36,1);
 }
 
 /* wire */
@@ -131,26 +132,25 @@ body:before{
     #888 2px,
     #888 4px
   );
-  transition:height .6s ease-in;
 }
 
-/* handle as hollow T outline */
+/* handle as upside-down hollow T outline */
 #handle{
   position:relative;
-  width:120px;
-  height:60px;
-  margin-top:-6px; /* overlap slightly for connected look */
+  width:140px;
+  height:80px;
+  margin-top:-6px; /* overlaps wire */
 }
 
 #handle::before{
   content:"";
   position:absolute;
-  top:0;
+  bottom:0;
   left:0;
   width:100%;
   height:20px;
-  border:5px solid #ff2b2b;
-  border-radius:5px;
+  border:6px solid #ff2b2b;
+  border-radius:6px;
   background:transparent;
   box-shadow: inset 0 0 5px rgba(255,0,0,.4),0 0 6px rgba(255,0,0,.6);
 }
@@ -158,13 +158,13 @@ body:before{
 #handle::after{
   content:"";
   position:absolute;
-  top:0;
+  bottom:0;
   left:50%;
   transform:translateX(-50%);
   width:20px;
   height:100%;
-  border:5px solid #ff2b2b;
-  border-radius:5px;
+  border:6px solid #ff2b2b;
+  border-radius:6px;
   background:transparent;
   box-shadow: inset 0 0 5px rgba(255,0,0,.4),0 0 6px rgba(255,0,0,.6);
 }
@@ -206,6 +206,17 @@ button{
   letter-spacing:3px;
 }
 
+/* MOBILE RESPONSIVE */
+@media (max-width:768px){
+  .glitch{font-size:28px; letter-spacing:4px;}
+  .clue{font-size:9px;}
+  #wire{height:150px;}
+  #handle{width:90px; height:50px; margin-top:-5px;}
+  #handle::before{height:12px; border:4px solid #ff2b2b;}
+  #handle::after{width:14px; border:4px solid #ff2b2b;}
+  #signup input{width:180px;}
+  #signup button{padding:8px 16px; margin-left:4px;}
+}
 </style>
 </head>
 
@@ -243,20 +254,18 @@ INDUSTRY GIANTS // IG-001
 
 <script>
 const cord = document.getElementById("cord")
-const wire = document.getElementById("wire")
-const signup = document.getElementById("signup")
 const audio = document.getElementById("track")
 const clues = document.querySelectorAll(".clue")
+const signup = document.getElementById("signup")
 
-/* initial drop for wire+handle container */
+// initial drop
 setTimeout(()=>{
-  cord.style.transition = "top 1.4s cubic-bezier(.22,.61,.36,1)"
-  cord.style.top = "260px"
+  cord.style.top="260px"
 },1200)
 
 cord.onclick = ()=>{
-  cord.style.transition = "top .6s ease-in"
-  cord.style.top = "-140px"
+  cord.style.transition="top .6s ease-in"
+  cord.style.top="-140px"
   document.querySelector(".glitch").style.display="none"
   setTimeout(()=>{signup.style.display="block"},500)
 
@@ -271,8 +280,8 @@ cord.onclick = ()=>{
     let start=null
     function fadeIn(ts){
       if(!start) start=ts
-      const prog = ts-start
-      audio.volume = Math.min(prog/fadeDur*targetVol,targetVol)
+      const prog=ts-start
+      audio.volume=Math.min(prog/fadeDur*targetVol,targetVol)
       if(prog<fadeDur) requestAnimationFrame(fadeIn)
       else audio.volume=targetVol
     }
@@ -287,13 +296,13 @@ cord.onclick = ()=>{
     index=(index+1)%clues.length
   },1200)
 
-  // background pulsate
+  // background pulsation
   let start=null
   function animateBG(ts){
     if(!start) start=ts
     const t=(ts-start)/1000
     const sine=Math.sin(t*0.3)
-    const b=32+32*((sine+1)/2)
+    const b=32+50*((sine+1)/2)
     document.body.style.backgroundColor=`rgb(0,0,${b})`
     requestAnimationFrame(animateBG)
   }
