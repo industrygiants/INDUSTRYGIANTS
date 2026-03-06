@@ -2,300 +2,230 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Industry Giants</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Pull The Ripcord</title>
 
 <style>
 
 body{
 margin:0;
-background:black;
+background:#000;
 color:white;
-font-family:monospace;
+font-family:Arial,Helvetica,sans-serif;
 overflow:hidden;
+display:flex;
+align-items:center;
+justify-content:center;
+height:100vh;
+text-align:center;
 }
 
-/* scanline effect */
+/* background scan lines */
 
 body::after{
 content:"";
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
+position:absolute;
+inset:0;
 background:repeating-linear-gradient(
 0deg,
-rgba(255,255,255,.04),
-rgba(255,255,255,.04) 1px,
-transparent 1px,
-transparent 3px
+rgba(255,255,255,0.03) 0px,
+rgba(255,255,255,0.03) 2px,
+transparent 2px,
+transparent 4px
 );
 pointer-events:none;
 }
 
-/* center text */
+/* main container */
 
-.center{
-position:absolute;
-top:45%;
-left:50%;
-transform:translate(-50%,-50%);
-text-align:center;
-opacity:0;
-transition:opacity 1.5s;
-}
-
-.center.show{
-opacity:1;
-}
-
-/* glitch text */
-
-.glitch{
-font-size:2rem;
-letter-spacing:4px;
+.scene{
 position:relative;
-}
-
-.glitch::before,
-.glitch::after{
-content:attr(data-text);
-position:absolute;
-left:0;
-top:0;
-width:100%;
-opacity:.7;
-}
-
-.glitch::before{
-color:red;
-animation:g1 1s infinite;
-}
-
-.glitch::after{
-color:cyan;
-animation:g2 1s infinite;
-}
-
-@keyframes g1{
-0%{transform:translate(2px,0)}
-50%{transform:translate(-2px,2px)}
-100%{transform:translate(0,0)}
-}
-
-@keyframes g2{
-0%{transform:translate(-2px,0)}
-50%{transform:translate(2px,-2px)}
-100%{transform:translate(0,0)}
-}
-
-/* blinds */
-
-#blind{
-position:fixed;
-top:-100%;
-left:0;
 width:100%;
 height:100%;
-background:black;
-transition:top 1s ease;
-z-index:10;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
 }
 
-/* signup */
+/* cord */
 
-#signup{
-display:none;
+.cord{
 position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-text-align:center;
-z-index:11;
+top:0;
+width:3px;
+height:40vh;
+background:linear-gradient(#bbb,#eee,#999);
+}
+
+/* handle */
+
+.handle{
+position:absolute;
+top:40vh;
+width:min(240px,45vw);
+height:min(140px,26vw);
+cursor:pointer;
+transform:translateY(-50%);
+transition:transform .2s;
+}
+
+/* realistic red tubing */
+
+.handle svg{
+width:100%;
+height:100%;
+filter:drop-shadow(0 10px 12px rgba(0,0,0,.6));
+}
+
+.handle:hover{
+transform:translateY(-48%);
+}
+
+/* text */
+
+.text{
+position:absolute;
+top:55vh;
+font-size:min(48px,7vw);
+letter-spacing:.15em;
+line-height:1.2;
+text-transform:uppercase;
+}
+
+/* glitch style */
+
+.glitch{
+color:#fff;
+text-shadow:
+-2px 0 red,
+2px 0 cyan;
+}
+
+/* email form */
+
+form{
+margin-top:20px;
+display:none;
 }
 
 input{
 padding:12px;
-background:black;
-border:1px solid white;
-color:white;
+font-size:16px;
+border:none;
+border-radius:4px;
 }
 
 button{
 padding:12px 20px;
-background:red;
+font-size:16px;
 border:none;
+background:red;
 color:white;
 cursor:pointer;
+border-radius:4px;
+}
+
+/* mobile adjustments */
+
+@media (max-width:600px){
+
+.text{
+font-size:8vw;
+top:60vh;
+}
+
+.cord{
+height:35vh;
+}
+
+.handle{
+top:35vh;
+}
+
 }
 
 </style>
 </head>
+
 <body>
 
-<div class="center" id="text">
-<div class="glitch" data-text="CLOSE YOUR EYES AND PULL THE RIPCORD">
-CLOSE YOUR EYES AND PULL THE RIPCORD
-</div>
-</div>
+<div class="scene">
 
-<!-- RIPCORD -->
+<div class="cord"></div>
 
-<svg id="ripcord" width="220" height="600" style="position:absolute; left:50%; transform:translateX(-50%);">
+<div class="handle" id="ripcord">
 
-<!-- cable -->
+<svg viewBox="0 0 300 160">
 
-<line id="cord"
-x1="110"
-y1="0"
-x2="110"
-y2="0"
-stroke="#888"
-stroke-width="3"
-stroke-linecap="round"/>
-
-<!-- inverted parachute handle -->
-
-<g id="handle" transform="translate(110,0)" style="cursor:grab">
+<defs>
+<linearGradient id="redtube" x1="0" x2="1">
+<stop offset="0%" stop-color="#ff3b3b"/>
+<stop offset="50%" stop-color="#d40000"/>
+<stop offset="100%" stop-color="#ff3b3b"/>
+</linearGradient>
+</defs>
 
 <path d="
-M -80 -25
-Q -95 -25 -95 0
-Q -95 25 -80 25
-L -25 25
-L -25 70
-Q -25 90 0 90
-Q 25 90 25 70
-L 25 25
-L 80 25
-Q 95 25 95 0
-Q 95 -25 80 -25
-Z
-"
-fill="#c40000"
-stroke="#6b0000"
-stroke-width="4"/>
-
-</g>
+M30 40
+Q30 10 60 10
+H240
+Q270 10 270 40
+Q270 70 240 70
+H180
+V120
+Q180 150 150 150
+Q120 150 120 120
+V70
+H60
+Q30 70 30 40
+Z"
+fill="url(#redtube)"
+stroke="#8a0000"
+stroke-width="6"
+stroke-linejoin="round"/>
 
 </svg>
 
-<div id="blind"></div>
+</div>
 
-<div id="signup">
-
-<h2>INDUSTRY GIANTS</h2>
-<p>Enter your email</p>
+<div class="text glitch">
+CLOSE YOUR EYES AND PULL<br>
+THE RIPCORD
+</div>
 
 <form action="https://formspree.io/f/xzdjpndk" method="POST">
 <input type="email" name="email" placeholder="email address" required>
 <button>JOIN</button>
 </form>
 
+<audio id="song" loop>
+<source src="sample.mp3" type="audio/mpeg">
+</audio>
+
 </div>
 
 <script>
 
-const cord=document.getElementById("cord")
-const handle=document.getElementById("handle")
-const text=document.getElementById("text")
-const blind=document.getElementById("blind")
-const signup=document.getElementById("signup")
+const ripcord=document.getElementById("ripcord")
+const audio=document.getElementById("song")
+const form=document.querySelector("form")
 
-let drop=0
-let maxDrop=260
+let pulled=false
 
-/* descend from ceiling with extending cable */
+ripcord.addEventListener("mousedown",()=>{
 
-function lowerRipcord(){
+if(pulled)return
 
-drop+=2
+pulled=true
 
-cord.setAttribute("y2",drop)
-handle.setAttribute("transform","translate(110,"+drop+")")
+ripcord.style.transform="translateY(120px)"
 
-if(drop<maxDrop){
-requestAnimationFrame(lowerRipcord)
-}else{
+audio.play()
 
-setTimeout(()=>{
-text.classList.add("show")
-enableInteraction()
-},500)
+form.style.display="block"
 
-}
-
-}
-
-setTimeout(lowerRipcord,800)
-
-/* interaction */
-
-let pulling=false
-let startY
-let base=maxDrop
-let maxPull=200
-
-function enableInteraction(){
-
-handle.addEventListener("mousedown",start)
-document.addEventListener("mousemove",move)
-document.addEventListener("mouseup",end)
-
-handle.addEventListener("touchstart",start)
-document.addEventListener("touchmove",move)
-document.addEventListener("touchend",end)
-
-}
-
-function start(e){
-
-pulling=true
-startY=(e.touches?e.touches[0].clientY:e.clientY)
-
-}
-
-function move(e){
-
-if(!pulling)return
-
-let y=(e.touches?e.touches[0].clientY:e.clientY)
-let diff=y-startY
-
-if(diff<0) diff=0
-if(diff>maxPull) diff=maxPull
-
-let newY=base+diff
-
-handle.setAttribute("transform","translate(110,"+newY+")")
-cord.setAttribute("y2",newY)
-
-}
-
-function end(){
-
-if(!pulling)return
-pulling=false
-
-let y=handle.transform.baseVal.getItem(0).matrix.f
-
-if(y>base+150){
-
-blind.style.top="0"
-
-setTimeout(()=>{
-signup.style.display="block"
-},900)
-
-}else{
-
-handle.setAttribute("transform","translate(110,"+base+")")
-cord.setAttribute("y2",base)
-
-}
-
-}
+})
 
 </script>
 
