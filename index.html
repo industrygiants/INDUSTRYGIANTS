@@ -6,103 +6,105 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
-<!-- FAVICONS -->
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-<link rel="manifest" href="site.webmanifest">
 
 <style>
-body{
-  margin:0;
-  background:#000;
-  color:#fff;
-  font-family:'Share Tech Mono',monospace;
-  overflow:hidden;
-  height:100vh;
-  transition: background 1s linear;
+
+html,body{
+margin:0;
+padding:0;
+height:100%;
+overflow:hidden;
+background:#000;
+font-family:'Share Tech Mono',monospace;
+color:white;
 }
 
 /* scanlines */
+
 body:before{
-  content:"";
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:repeating-linear-gradient(
-    0deg,
-    rgba(255,255,255,.03),
-    rgba(255,255,255,.03) 1px,
-    transparent 1px,
-    transparent 3px
-  );
-  pointer-events:none;
+content:"";
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:repeating-linear-gradient(
+0deg,
+rgba(255,255,255,.03),
+rgba(255,255,255,.03) 1px,
+transparent 1px,
+transparent 3px
+);
+pointer-events:none;
 }
 
-/* glitch text */
+/* glitch title */
+
 .glitch{
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  font-size:48px;
-  letter-spacing:8px;
-  text-align:center;
-  white-space:nowrap;
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:48px;
+letter-spacing:8px;
+white-space:nowrap;
+text-align:center;
 }
 
 /* glitch layers */
+
 .glitch:before,
 .glitch:after{
-  content:attr(data-text);
-  position:absolute;
-  left:0;
-  top:0;
-  width:100%;
-  overflow:hidden;
+content:attr(data-text);
+position:absolute;
+top:0;
+left:0;
+width:100%;
 }
+
 .glitch:before{
-  left:2px;
-  text-shadow:-2px 0 red;
-  clip-path:polygon(0 0,100% 0,100% 45%,0 45%);
-  animation:glitch1 2s infinite linear alternate-reverse;
+left:2px;
+text-shadow:-2px 0 red;
+clip-path:polygon(0 0,100% 0,100% 45%,0 45%);
+animation:glitch1 2s infinite linear alternate-reverse;
 }
+
 .glitch:after{
-  left:-2px;
-  text-shadow:-2px 0 cyan;
-  clip-path:polygon(0 60%,100% 60%,100% 100%,0 100%);
-  animation:glitch2 2s infinite linear alternate-reverse;
+left:-2px;
+text-shadow:-2px 0 cyan;
+clip-path:polygon(0 60%,100% 60%,100% 100%,0 100%);
+animation:glitch2 2s infinite linear alternate-reverse;
 }
 
 @keyframes glitch1{
 0%{transform:translate(0)}
-20%{transform:translate(-2px,2px)}
-40%{transform:translate(-2px,-2px)}
-60%{transform:translate(2px,2px)}
-80%{transform:translate(1px,-1px)}
+25%{transform:translate(-2px,2px)}
+50%{transform:translate(-2px,-2px)}
+75%{transform:translate(2px,2px)}
 100%{transform:translate(0)}
 }
+
 @keyframes glitch2{
 0%{transform:translate(0)}
-20%{transform:translate(2px,-2px)}
-40%{transform:translate(2px,2px)}
-60%{transform:translate(-2px,-1px)}
-80%{transform:translate(1px,2px)}
+25%{transform:translate(2px,-2px)}
+50%{transform:translate(2px,2px)}
+75%{transform:translate(-2px,-1px)}
 100%{transform:translate(0)}
 }
 
-/* hidden lyric fragments */
+/* clues */
+
 .clue{
-  position:absolute;
-  font-size:11px;
-  opacity:.18;
-  color:#aaa;
-  transition:text-shadow 0.3s ease-in-out, color 0.3s ease-in-out;
+position:absolute;
+font-size:11px;
+opacity:.18;
+color:#aaa;
+transition:.3s;
 }
 
-/* desktop positions */
 #c1{top:12%;left:6%}
 #c2{top:78%;left:12%}
 #c3{top:32%;right:8%}
@@ -110,141 +112,136 @@ body:before{
 #c5{bottom:40%;left:3%}
 
 /* ripcord */
+
 #cord{
-  position:absolute;
-  top:0;
-  left:50%;
-  transform:translateX(-50%);
-  z-index:20;
-  cursor:pointer;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+position:absolute;
+top:0;
+left:50%;
+transform:translateX(-50%);
+cursor:pointer;
+display:flex;
+flex-direction:column;
+align-items:center;
+z-index:10;
 }
 
 #wire{
-  width:3px;
-  background:repeating-linear-gradient(
-    45deg,
-    #dcdcdc,
-    #dcdcdc 2px,
-    #888 2px,
-    #888 4px
-  );
+width:3px;
+background:repeating-linear-gradient(
+45deg,
+#dcdcdc,
+#dcdcdc 2px,
+#888 2px,
+#888 4px
+);
 }
 
 #handle-wrapper{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  position:absolute;
-  top:-100px;
-  transition:top 1.4s cubic-bezier(.22,.61,.36,1);
+position:absolute;
+top:-120px;
+transition:top 1.3s cubic-bezier(.22,.61,.36,1);
 }
 
 #handle{
-  width:40px;
-  height:20px;
-  border:5px solid #ff2b2b;
-  border-radius:6px;
-  background:transparent;
-  box-shadow: inset 0 0 5px rgba(255,0,0,.4),0 0 6px rgba(255,0,0,.6);
+width:40px;
+height:20px;
+border:5px solid #ff2b2b;
+border-radius:6px;
+box-shadow:0 0 6px red,inset 0 0 6px red;
 }
 
 /* signup */
+
 #signup{
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  display:none;
-  text-align:center;
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+display:none;
 }
 
 input{
-  background:#000;
-  border:1px solid #444;
-  color:#fff;
-  padding:10px;
-  font-family:inherit;
-  width:260px;
+background:#000;
+border:1px solid #444;
+color:#fff;
+padding:10px;
+font-family:inherit;
+width:260px;
 }
 
 button{
-  background:#111;
-  border:1px solid #555;
-  color:#fff;
-  padding:10px 20px;
-  margin-left:6px;
-  cursor:pointer;
+background:#111;
+border:1px solid #555;
+color:white;
+padding:10px 18px;
+margin-left:5px;
+cursor:pointer;
 }
 
 /* footer */
+
 #footer{
-  position:absolute;
-  bottom:12px;
-  font-size:10px;
-  opacity:.25;
-  letter-spacing:3px;
+position:absolute;
+bottom:10px;
+font-size:10px;
+opacity:.25;
+letter-spacing:3px;
 }
 
-/* =======================
-   MOBILE ONLY STYLES
-   ======================= */
+/* =========================
+MOBILE FIX
+========================= */
 
 @media screen and (max-width:768px){
 
 .glitch{
-  font-size:28px;
-  letter-spacing:3px;
-  width:90%;
-  white-space:normal;
-  line-height:1.4;
-  top:38%;
+font-size:7vw;
+letter-spacing:2px;
+white-space:normal;
+width:90%;
+line-height:1.4;
+top:42%;
 }
 
 .clue{
-  font-size:15px;
-  opacity:.25;
-  max-width:70%;
+font-size:14px;
+opacity:.25;
+max-width:70%;
 }
 
+/* vertical spacing for tall phones */
+
 #c1{top:8%;left:6%}
-#c2{top:26%;left:10%}
-#c3{top:60%;right:8%}
-#c4{bottom:18%;right:10%}
-#c5{bottom:8%;left:6%}
+#c2{top:24%;left:12%}
+#c3{top:64%;right:8%}
+#c4{bottom:20%;right:8%}
+#c5{bottom:10%;left:8%}
 
 #handle{
-  width:46px;
-  height:24px;
+width:48px;
+height:24px;
 }
 
 #wire{
-  width:4px;
-}
-
-#signup{
-  width:90%;
+width:4px;
 }
 
 input{
-  width:65%;
-  font-size:16px;
+width:65%;
+font-size:16px;
 }
 
 button{
-  font-size:16px;
-  padding:10px 14px;
+font-size:16px;
 }
 
 #footer{
-  font-size:9px;
-  bottom:8px;
-  letter-spacing:2px;
+font-size:9px;
+bottom:6px;
 }
 
 }
+
 </style>
 </head>
 
@@ -256,15 +253,15 @@ CLOSE YOUR EYES AND PULL THE RIPCORD
 
 <div class="clue" id="c1">working so late on the corporate shift</div>
 <div class="clue" id="c2">she cried all night</div>
-<div class="clue" id="c3">it’s a necessary torture</div>
+<div class="clue" id="c3">it's a necessary torture</div>
 <div class="clue" id="c4">no one coming to save you</div>
 <div class="clue" id="c5">registry office</div>
 
 <div id="cord">
-  <div id="wire"></div>
-  <div id="handle-wrapper">
-    <div id="handle"></div>
-  </div>
+<div id="wire"></div>
+<div id="handle-wrapper">
+<div id="handle"></div>
+</div>
 </div>
 
 <div id="signup">
@@ -283,102 +280,85 @@ INDUSTRY GIANTS // IG-001
 </audio>
 
 <script>
-const handleWrapper = document.getElementById("handle-wrapper");
-const cord = document.getElementById("cord");
-const audio = document.getElementById("track");
-const wire = document.getElementById("wire");
-const clues = document.querySelectorAll(".clue");
-const signup = document.getElementById("signup");
-const glitch = document.querySelector(".glitch");
 
-/* initial drop */
+const handleWrapper=document.getElementById("handle-wrapper");
+const cord=document.getElementById("cord");
+const wire=document.getElementById("wire");
+const audio=document.getElementById("track");
+const clues=document.querySelectorAll(".clue");
+const signup=document.getElementById("signup");
+const glitch=document.querySelector(".glitch");
+
 setTimeout(()=>{
-  handleWrapper.style.top="50vh";
-  wire.style.height="50vh";
+handleWrapper.style.top="48vh";
+wire.style.height="48vh";
 },100);
 
-/* wire follows handle */
 function updateWire(){
-  const handleRect = handleWrapper.getBoundingClientRect();
-  wire.style.height = handleRect.top + "px";
-  requestAnimationFrame(updateWire);
-}
+const rect=handleWrapper.getBoundingClientRect();
+wire.style.height=rect.top+"px";
 requestAnimationFrame(updateWire);
+}
 
-/* activation */
-cord.onclick = ()=>{
-  glitch.style.display="none";
-  setTimeout(()=>{signup.style.display="block"},500);
+updateWire();
 
-  handleWrapper.style.transition="top 0.8s ease-in";
-  handleWrapper.style.top="-150px";
+cord.onclick=()=>{
 
-  audio.volume = 0;
-  audio.play().catch(e=>console.log(e));
+glitch.style.display="none";
+setTimeout(()=>signup.style.display="block",400);
 
-  const targetVol = 0.5;
-  const fadeDur = 3000;
-  let start=null;
+handleWrapper.style.transition="top .8s ease-in";
+handleWrapper.style.top="-150px";
 
-  function fadeIn(ts){
-    if(!start) start=ts;
-    const prog=ts-start;
-    audio.volume=Math.min(prog/fadeDur*targetVol,targetVol);
-    if(prog<fadeDur) requestAnimationFrame(fadeIn);
-  }
-  requestAnimationFrame(fadeIn);
+audio.volume=0;
+audio.play();
 
-  /* clue glow cycle */
-  let index=0;
+let start=null;
 
-  function pulseClues(){
-    clues.forEach(c=>{
-      c.style.color="#aaa";
-      c.style.textShadow="";
-      c.style.opacity=".18";
-    });
+function fade(ts){
+if(!start)start=ts;
+let p=(ts-start)/3000;
+audio.volume=Math.min(p*.5,.5);
+if(p<1)requestAnimationFrame(fade);
+}
 
-    const clue = clues[index];
-    let t0=null;
+requestAnimationFrame(fade);
 
-    function pulse(ts){
-      if(!t0) t0=ts;
-      const sine=(Math.sin((ts-t0)/600)+1)/2;
-      const r=Math.floor(255*sine+100);
-      const g=Math.floor(255*sine+100);
-      const b=Math.floor(255*sine+100);
+let i=0;
 
-      clue.style.color=`rgb(${r},${g},${b})`;
-      clue.style.textShadow=`0 0 ${4+10*sine}px red,0 0 ${8+10*sine}px red`;
-      clue.style.opacity=0.9;
+function glow(){
 
-      requestAnimationFrame(pulse);
-    }
+clues.forEach(c=>{
+c.style.color="#aaa";
+c.style.textShadow="";
+c.style.opacity=.18;
+});
 
-    requestAnimationFrame(pulse);
+const clue=clues[i];
 
-    index=(index+1)%clues.length;
-    setTimeout(pulseClues,1200);
-  }
+let t0=null;
 
-  pulseClues();
+function pulse(ts){
+if(!t0)t0=ts;
+let s=(Math.sin((ts-t0)/600)+1)/2;
+clue.style.color=`rgb(${200+55*s},${200+55*s},${200+55*s})`;
+clue.style.textShadow=`0 0 ${8*s}px red`;
+clue.style.opacity=.9;
+requestAnimationFrame(pulse);
+}
 
-  /* dark blue pulse background */
-  let startBG=null;
+pulse();
 
-  function animateBG(ts){
-    if(!startBG) startBG=ts;
-    const t=(ts-startBG)/1000;
-    const sine=Math.sin(t*0.3);
-    const b=8+3*((sine+1)/2);
+i=(i+1)%clues.length;
 
-    document.body.style.backgroundColor=`rgb(0,0,${b})`;
+setTimeout(glow,1200);
 
-    requestAnimationFrame(animateBG);
-  }
+}
 
-  requestAnimationFrame(animateBG);
+glow();
+
 };
+
 </script>
 
 </body>
