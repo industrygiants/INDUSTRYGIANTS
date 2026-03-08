@@ -47,7 +47,7 @@ transparent 3px
 pointer-events:none;
 }
 
-/* glitch text */
+/* headline */
 
 .glitch{
 position:absolute;
@@ -61,48 +61,41 @@ max-width:90vw;
 white-space:normal;
 line-height:1.3;
 color:#e6e6e6;
+animation:signalglitch 9s infinite;
 }
 
-/* glitch layers */
+/* subtle signal distortion */
 
-.glitch:before,
-.glitch:after{
-content:attr(data-text);
-position:absolute;
-left:0;
-top:0;
-width:100%;
-overflow:hidden;
+@keyframes signalglitch{
+
+0%{transform:translate(-50%,-50%)}
+92%{transform:translate(-50%,-50%)}
+
+93%{
+transform:translate(calc(-50% + 2px),calc(-50% - 1px));
+opacity:.9;
 }
 
-.glitch:before{
-left:2px;
-text-shadow:-2px 0 #ff3b3b;
-clip-path:polygon(0 0,100% 0,100% 45%,0 45%);
-animation:glitch1 2s infinite linear alternate-reverse;
+94%{
+transform:translate(calc(-50% - 2px),calc(-50% + 1px));
 }
 
-.glitch:after{
-left:-2px;
-text-shadow:-2px 0 #2dd4ff;
-clip-path:polygon(0 60%,100% 60%,100% 100%,0 100%);
-animation:glitch2 2s infinite linear alternate-reverse;
+95%{
+transform:translate(-50%,-50%);
+opacity:1;
 }
 
-@keyframes glitch1{
-0%{transform:translate(0)}
-25%{transform:translate(-2px,2px)}
-50%{transform:translate(-2px,-2px)}
-75%{transform:translate(2px,2px)}
-100%{transform:translate(0)}
+96%{
+transform:translate(calc(-50% + 1px),calc(-50% + 2px));
+opacity:.92;
 }
 
-@keyframes glitch2{
-0%{transform:translate(0)}
-25%{transform:translate(2px,-2px)}
-50%{transform:translate(2px,2px)}
-75%{transform:translate(-2px,-1px)}
-100%{transform:translate(0)}
+97%{
+transform:translate(-50%,-50%);
+}
+
+100%{transform:translate(-50%,-50%)}
+
 }
 
 /* clues */
@@ -156,10 +149,10 @@ transition:top 1.4s cubic-bezier(.22,.61,.36,1);
 #handle{
 width:40px;
 height:20px;
-border:5px solid #e23a3a;
+border:5px solid #d4d4d4;
 border-radius:6px;
 background:transparent;
-box-shadow:0 0 6px rgba(226,58,58,.7), inset 0 0 6px rgba(226,58,58,.6);
+box-shadow:0 0 6px rgba(255,255,255,.25), inset 0 0 6px rgba(255,255,255,.25);
 }
 
 /* signup */
@@ -254,7 +247,7 @@ bottom:6px;
 
 <body>
 
-<div class="glitch" data-text="CLOSE YOUR EYES AND PULL THE RIPCORD">
+<div class="glitch">
 CLOSE YOUR EYES AND PULL THE RIPCORD
 </div>
 
@@ -347,7 +340,7 @@ function pulse(ts){
 if(!t0)t0=ts;
 let s=(Math.sin((ts-t0)/600)+1)/2;
 clue.style.opacity=.85;
-clue.style.textShadow=`0 0 ${8*s}px #ff3b3b`;
+clue.style.textShadow=`0 0 ${8*s}px rgba(230,230,230,.7)`;
 requestAnimationFrame(pulse);
 }
 
