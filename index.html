@@ -109,7 +109,7 @@ animation:glitch2 2s infinite linear alternate-reverse;
 .clue{
 position:absolute;
 font-size:11px;
-opacity:.18;
+opacity:.04;   /* CHANGED: barely visible before pull */
 color:#aaa;
 transition:.3s;
 max-width:70vw;
@@ -215,7 +215,6 @@ top:42%;
 
 .clue{
 font-size:14px;
-opacity:.25;
 }
 
 #c1{top:8%;left:6%}
@@ -296,9 +295,11 @@ const clues=document.querySelectorAll(".clue");
 const signup=document.getElementById("signup");
 const glitch=document.querySelector(".glitch");
 
+/* LOWER RIPCORD STOP POINT SLIGHTLY */
+
 setTimeout(()=>{
-handleWrapper.style.top="48vh";
-wire.style.height="48vh";
+handleWrapper.style.top="52vh";  /* CHANGED from 48vh */
+wire.style.height="52vh";
 },100);
 
 function updateWire(){
@@ -334,10 +335,11 @@ let i=0;
 
 function glow(){
 
+/* keep others almost invisible */
+
 clues.forEach(c=>{
-c.style.color="#aaa";
+c.style.opacity=".04";
 c.style.textShadow="";
-c.style.opacity=.18;
 });
 
 const clue=clues[i];
@@ -347,9 +349,8 @@ let t0=null;
 function pulse(ts){
 if(!t0)t0=ts;
 let s=(Math.sin((ts-t0)/600)+1)/2;
-clue.style.color=`rgb(${200+55*s},${200+55*s},${200+55*s})`;
-clue.style.textShadow=`0 0 ${8*s}px red`;
 clue.style.opacity=.9;
+clue.style.textShadow=`0 0 ${8*s}px red`;
 requestAnimationFrame(pulse);
 }
 
@@ -357,7 +358,7 @@ pulse();
 
 i=(i+1)%clues.length;
 
-setTimeout(glow,1200);
+setTimeout(glow,1400);
 
 }
 
