@@ -102,14 +102,14 @@ body:before{
   transition:text-shadow 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
-/* default desktop positions */
+/* desktop positions */
 #c1{top:12%;left:6%}
 #c2{top:78%;left:12%}
 #c3{top:32%;right:8%}
 #c4{bottom:8%;right:12%}
 #c5{bottom:40%;left:3%}
 
-/* ripcord container */
+/* ripcord */
 #cord{
   position:absolute;
   top:0;
@@ -122,7 +122,6 @@ body:before{
   align-items:center;
 }
 
-/* wire */
 #wire{
   width:3px;
   background:repeating-linear-gradient(
@@ -134,17 +133,15 @@ body:before{
   );
 }
 
-/* handle wrapper */
 #handle-wrapper{
   display:flex;
   flex-direction:column;
   align-items:center;
   position:absolute;
-  top:-100px; /* start off screen */
+  top:-100px;
   transition:top 1.4s cubic-bezier(.22,.61,.36,1);
 }
 
-/* simple pulley handle */
 #handle{
   width:40px;
   height:20px;
@@ -154,7 +151,7 @@ body:before{
   box-shadow: inset 0 0 5px rgba(255,0,0,.4),0 0 6px rgba(255,0,0,.6);
 }
 
-/* email capture */
+/* signup */
 #signup{
   position:absolute;
   top:50%;
@@ -163,6 +160,7 @@ body:before{
   display:none;
   text-align:center;
 }
+
 input{
   background:#000;
   border:1px solid #444;
@@ -171,6 +169,7 @@ input{
   font-family:inherit;
   width:260px;
 }
+
 button{
   background:#111;
   border:1px solid #555;
@@ -188,8 +187,67 @@ button{
   opacity:.25;
   letter-spacing:3px;
 }
+
+/* =======================
+   MOBILE ONLY STYLES
+   ======================= */
+
+@media screen and (max-width:768px){
+
+.glitch{
+  font-size:28px;
+  letter-spacing:3px;
+  width:90%;
+  white-space:normal;
+  line-height:1.4;
+  top:38%;
+}
+
+.clue{
+  font-size:15px;
+  opacity:.25;
+  max-width:70%;
+}
+
+#c1{top:8%;left:6%}
+#c2{top:26%;left:10%}
+#c3{top:60%;right:8%}
+#c4{bottom:18%;right:10%}
+#c5{bottom:8%;left:6%}
+
+#handle{
+  width:46px;
+  height:24px;
+}
+
+#wire{
+  width:4px;
+}
+
+#signup{
+  width:90%;
+}
+
+input{
+  width:65%;
+  font-size:16px;
+}
+
+button{
+  font-size:16px;
+  padding:10px 14px;
+}
+
+#footer{
+  font-size:9px;
+  bottom:8px;
+  letter-spacing:2px;
+}
+
+}
 </style>
 </head>
+
 <body>
 
 <div class="glitch" data-text="CLOSE YOUR EYES AND PULL THE RIPCORD">
@@ -233,40 +291,13 @@ const clues = document.querySelectorAll(".clue");
 const signup = document.getElementById("signup");
 const glitch = document.querySelector(".glitch");
 
-// detect mobile
-const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-if(isMobile){
-  // BIG readable glitch text
-  glitch.style.fontSize = "32px";
-  glitch.style.letterSpacing = "3px";
-  glitch.style.top = "40%";
-
-  // SCATTER clues around screen for mobile
-  const positions = [
-    {top:"10%", left:"5%"},
-    {top:"25%", right:"5%"},
-    {top:"50%", left:"15%"},
-    {top:"65%", right:"10%"},
-    {top:"80%", left:"10%"}
-  ];
-  clues.forEach((c,i)=>{
-    c.style.fontSize="16px";
-    c.style.opacity=".18";
-    c.style.position="absolute";
-    if(positions[i].top) c.style.top=positions[i].top;
-    if(positions[i].left) c.style.left=positions[i].left;
-    if(positions[i].right) c.style.right=positions[i].right;
-  });
-}
-
-// initial drop
+/* initial drop */
 setTimeout(()=>{
-  handleWrapper.style.top="40vh";
-  wire.style.height="40vh";
+  handleWrapper.style.top="50vh";
+  wire.style.height="50vh";
 },100);
 
-// animate wire height continuously to follow handle
+/* wire follows handle */
 function updateWire(){
   const handleRect = handleWrapper.getBoundingClientRect();
   wire.style.height = handleRect.top + "px";
@@ -274,69 +305,81 @@ function updateWire(){
 }
 requestAnimationFrame(updateWire);
 
-// click to retract, start audio and effects
+/* activation */
 cord.onclick = ()=>{
   glitch.style.display="none";
   setTimeout(()=>{signup.style.display="block"},500);
 
-  // retract handle
   handleWrapper.style.transition="top 0.8s ease-in";
-  handleWrapper.style.top="-150px"; // off top of screen
+  handleWrapper.style.top="-150px";
 
-  // audio fade in
   audio.volume = 0;
   audio.play().catch(e=>console.log(e));
+
   const targetVol = 0.5;
   const fadeDur = 3000;
   let start=null;
+
   function fadeIn(ts){
     if(!start) start=ts;
     const prog=ts-start;
     audio.volume=Math.min(prog/fadeDur*targetVol,targetVol);
     if(prog<fadeDur) requestAnimationFrame(fadeIn);
-    else audio.volume=targetVol;
   }
   requestAnimationFrame(fadeIn);
 
-  // glow clues individually
+  /* clue glow cycle */
   let index=0;
+
   function pulseClues(){
     clues.forEach(c=>{
       c.style.color="#aaa";
       c.style.textShadow="";
       c.style.opacity=".18";
     });
+
     const clue = clues[index];
     let t0=null;
+
     function pulse(ts){
       if(!t0) t0=ts;
-      const sine = (Math.sin((ts-t0)/600)+1)/2; // ~1.2s cycle
-      const r = Math.floor(255*sine + 100);
-      const g = Math.floor(255*sine + 100);
-      const b = Math.floor(255*sine + 100);
+      const sine=(Math.sin((ts-t0)/600)+1)/2;
+      const r=Math.floor(255*sine+100);
+      const g=Math.floor(255*sine+100);
+      const b=Math.floor(255*sine+100);
+
       clue.style.color=`rgb(${r},${g},${b})`;
-      clue.style.textShadow=`0 0 ${4+10*sine}px red, 0 0 ${8+10*sine}px red`;
-      clue.style.opacity = 0.9;
+      clue.style.textShadow=`0 0 ${4+10*sine}px red,0 0 ${8+10*sine}px red`;
+      clue.style.opacity=0.9;
+
       requestAnimationFrame(pulse);
     }
+
     requestAnimationFrame(pulse);
-    index = (index+1)%clues.length;
+
+    index=(index+1)%clues.length;
     setTimeout(pulseClues,1200);
   }
+
   pulseClues();
 
-  // dark blue background pulsation
+  /* dark blue pulse background */
   let startBG=null;
+
   function animateBG(ts){
     if(!startBG) startBG=ts;
     const t=(ts-startBG)/1000;
     const sine=Math.sin(t*0.3);
-    const b = 8 + 3*((sine+1)/2); // darker blue
+    const b=8+3*((sine+1)/2);
+
     document.body.style.backgroundColor=`rgb(0,0,${b})`;
+
     requestAnimationFrame(animateBG);
   }
+
   requestAnimationFrame(animateBG);
 };
 </script>
+
 </body>
 </html>
